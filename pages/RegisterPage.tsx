@@ -1,7 +1,7 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserType } from '../types';
+import { MOCK_SPECIFIC_SERVICES } from '../services/api';
 
 const RegisterPage: React.FC = () => {
   const [userType, setUserType] = useState<UserType>(UserType.Client);
@@ -10,7 +10,20 @@ const RegisterPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
+  
+  // Worker specific fields
+  const [cpf, setCpf] = useState('');
+  const [areas, setAreas] = useState<string[]>([]);
+
   const navigate = useNavigate();
+
+  const handleAreaChange = (areaName: string) => {
+    setAreas(prevAreas =>
+      prevAreas.includes(areaName)
+        ? prevAreas.filter(a => a !== areaName)
+        : [...prevAreas, areaName]
+    );
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,6 +70,30 @@ const RegisterPage: React.FC = () => {
           <label className="block text-gray-300 mb-2" htmlFor="address">Endereço Completo</label>
           <input type="text" id="address" value={address} onChange={(e) => setAddress(e.target.value)} className="w-full bg-gray-800 border border-gray-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-brand-red" required />
         </div>
+         {userType === UserType.Worker && (
+          <>
+            <div className="mb-4">
+              <label className="block text-gray-300 mb-2" htmlFor="cpf">CPF</label>
+              <input type="text" id="cpf" value={cpf} onChange={(e) => setCpf(e.target.value)} className="w-full bg-gray-800 border border-gray-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-brand-red" required />
+            </div>
+            <div className="mb-6">
+              <label className="block text-gray-300 mb-2">Áreas de Atuação</label>
+              <div className="grid grid-cols-2 gap-3 p-4 bg-gray-800 border border-gray-600 rounded-md max-h-48 overflow-y-auto">
+                {MOCK_SPECIFIC_SERVICES.map(service => (
+                  <label key={service.id} className="flex items-center gap-2 text-gray-200 hover:text-white cursor-pointer transition-colors">
+                    <input
+                      type="checkbox"
+                      checked={areas.includes(service.name)}
+                      onChange={() => handleAreaChange(service.name)}
+                      className="w-4 h-4 text-brand-red bg-gray-700 border-gray-600 rounded focus:ring-brand-red focus:ring-offset-gray-800"
+                    />
+                    {service.name}
+                  </label>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
         <div className="mb-6">
           <label className="block text-gray-300 mb-2" htmlFor="password">Senha</label>
           <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full bg-gray-800 border border-gray-600 rounded-md py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-brand-red" required />

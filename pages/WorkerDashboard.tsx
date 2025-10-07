@@ -1,13 +1,12 @@
-
 import React, { useContext } from 'react';
 import AuthContext from '../contexts/AuthContext';
 import { BookingStatus } from '../types';
-import { MOCK_BOOKINGS } from '../services/api';
+import { getWorkerBookings } from '../services/api';
 import { StarIcon } from '../components/icons/StarIcon';
 
 const WorkerDashboard: React.FC = () => {
   const { user } = useContext(AuthContext);
-  const workerBookings = MOCK_BOOKINGS.filter(b => b.worker.id === user?.id);
+  const workerBookings = user ? getWorkerBookings(user.id) : [];
 
     const getStatusChip = (status: BookingStatus) => {
     switch (status) {
@@ -15,7 +14,8 @@ const WorkerDashboard: React.FC = () => {
       case BookingStatus.Completed: return 'bg-blue-500/20 text-blue-400';
       case BookingStatus.Canceled: return 'bg-red-500/20 text-red-400';
       case BookingStatus.InProgress: return 'bg-yellow-500/20 text-yellow-400';
-      case BookingStatus.Requested: return 'bg-gray-500/20 text-gray-300';
+      case BookingStatus.Requested: return 'bg-purple-500/20 text-purple-400';
+      case BookingStatus.PaymentPending: return 'bg-orange-500/20 text-orange-400';
       default: return 'bg-gray-700';
     }
   };
@@ -42,7 +42,7 @@ const WorkerDashboard: React.FC = () => {
           {user?.areas?.map(area => (
             <span key={area} className="bg-brand-red/80 text-white font-semibold px-4 py-2 rounded-full">{area}</span>
           ))}
-           <button className="bg-gray-700 text-white font-semibold px-4 py-2 rounded-full hover:bg-gray-600 transition-colors">+ Editar</button>
+           <button className="bg-brand-light-gray text-white font-semibold px-4 py-2 rounded-full hover:bg-gray-600 transition-colors">+ Editar</button>
         </div>
       </div>
       

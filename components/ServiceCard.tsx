@@ -1,11 +1,12 @@
 
 import React from 'react';
-import { Service } from '../types';
+// FIX: Replaced the non-existent 'Service' type with 'SpecificService', which is defined in types.ts and has the properties used by this component.
+import { SpecificService } from '../types';
 import { WrenchScrewdriverIcon } from './icons/WrenchScrewdriverIcon';
 
 interface ServiceCardProps {
-  service: Service;
-  onSelect: (service: Service) => void;
+  service: SpecificService;
+  onSelect: (service: SpecificService) => void;
 }
 
 const ServiceCard: React.FC<ServiceCardProps> = ({ service, onSelect }) => {

@@ -1,15 +1,14 @@
-
 import React, { useContext } from 'react';
 import AuthContext from '../contexts/AuthContext';
 import { BookingStatus } from '../types';
-import { MOCK_BOOKINGS } from '../services/api';
+import { getClientBookings } from '../services/api';
 import { CalendarDaysIcon } from '../components/icons/CalendarDaysIcon';
 import { ClockIcon } from '../components/icons/ClockIcon';
 import { WrenchScrewdriverIcon } from '../components/icons/WrenchScrewdriverIcon';
 
 const ClientDashboard: React.FC = () => {
   const { user } = useContext(AuthContext);
-  const clientBookings = MOCK_BOOKINGS.filter(b => b.client.id === user?.id);
+  const clientBookings = user ? getClientBookings(user.id) : [];
 
   const getStatusChip = (status: BookingStatus) => {
     switch (status) {
@@ -17,7 +16,8 @@ const ClientDashboard: React.FC = () => {
       case BookingStatus.Completed: return 'bg-blue-500/20 text-blue-400';
       case BookingStatus.Canceled: return 'bg-red-500/20 text-red-400';
       case BookingStatus.InProgress: return 'bg-yellow-500/20 text-yellow-400';
-      case BookingStatus.Requested: return 'bg-gray-500/20 text-gray-300';
+      case BookingStatus.Requested: return 'bg-purple-500/20 text-purple-400';
+      case BookingStatus.PaymentPending: return 'bg-orange-500/20 text-orange-400';
       default: return 'bg-gray-700';
     }
   };
@@ -52,7 +52,7 @@ const ClientDashboard: React.FC = () => {
                   {booking.status}
                 </span>
                 <p className="text-2xl font-bold text-brand-red">R$ {booking.totalValue.toFixed(2)}</p>
-                 <button className="bg-gray-700 text-white text-sm font-semibold py-2 px-4 rounded-md hover:bg-gray-600 transition-colors w-full md:w-auto">
+                 <button className="bg-brand-light-gray text-white text-sm font-semibold py-2 px-4 rounded-md hover:bg-gray-600 transition-colors w-full md:w-auto">
                     Ver Detalhes
                 </button>
              </div>
