@@ -1,8 +1,8 @@
-
 import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthContext from '../contexts/AuthContext';
 import { BoltIcon } from './icons/BoltIcon';
+import { UserType } from '../types';
 
 const Header: React.FC = () => {
   const { user, logout } = useContext(AuthContext);
@@ -12,11 +12,13 @@ const Header: React.FC = () => {
     logout();
     navigate('/');
   };
+  
+  const homePath = user?.type === UserType.Worker ? '/dashboard' : '/';
 
   return (
     <header className="bg-black/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <Link to="/" className="flex items-center gap-2 text-2xl font-bold text-white">
+        <Link to={homePath} className="flex items-center gap-2 text-2xl font-bold text-white">
           <BoltIcon className="w-8 h-8 text-brand-red" />
           <span className="font-poppins">Vini <span className="text-brand-red">Soluções Ágeis</span></span>
         </Link>

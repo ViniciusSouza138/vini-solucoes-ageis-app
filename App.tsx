@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { User } from './types';
+import { User, UserType } from './types';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
@@ -10,6 +10,7 @@ import DashboardPage from './pages/DashboardPage';
 import BookingPage from './pages/BookingPage';
 import PaymentPage from './pages/PaymentPage';
 import ConfirmationPage from './pages/ConfirmationPage';
+import RequestSentPage from './pages/RequestSentPage'; // Import new page
 import AuthContext from './contexts/AuthContext';
 
 // Componente para proteger rotas
@@ -27,6 +28,21 @@ const ProtectedRoute: React.FC<{ children: React.ReactElement }> = ({ children }
   }
 
   return children;
+};
+
+// Componente para redirecionar funcionários da página inicial para o dashboard
+const HomeRedirect: React.FC = () => {
+  const { user, loading } = React.useContext(AuthContext);
+
+  if (loading) {
+    return <div className="text-center p-10">Carregando...</div>;
+  }
+
+  if (user && user.type === UserType.Worker) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return <HomePage />;
 };
 
 
@@ -60,7 +76,7 @@ const App: React.FC = () => {
           <Header />
           <main className="flex-grow container mx-auto px-4 py-8">
             <Routes>
-              <Route path="/" element={<HomePage />} />
+              <Route path="/" element={<HomeRedirect />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               
@@ -69,6 +85,8 @@ const App: React.FC = () => {
               <Route path="/agendar/:workerId/:serviceId" element={<ProtectedRoute><BookingPage /></ProtectedRoute>} />
               <Route path="/pagamento/:bookingId" element={<ProtectedRoute><PaymentPage /></ProtectedRoute>} />
               <Route path="/confirmacao/:bookingId" element={<ProtectedRoute><ConfirmationPage /></ProtectedRoute>} />
+              <Route path="/solicitacao-enviada" element={<ProtectedRoute><RequestSentPage /></ProtectedRoute>} /> {/* Add new route */}
+
 
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>

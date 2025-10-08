@@ -1,7 +1,5 @@
-// FIX: Add React import for using React types like ComponentType.
 import React from 'react';
 
-// FIX: Removed a circular self-import of 'UserType' that conflicted with its declaration below.
 export enum UserType {
   Client = 'CLIENT',
   Worker = 'WORKER',
@@ -19,6 +17,7 @@ export interface User {
   reputation: number;
   areas?: string[]; // Nomes dos serviços específicos
   profilePictureUrl?: string; 
+  priceMargin?: number; // e.g., 1.05 for a 5% increase
 }
 
 export interface SpecificService {
@@ -26,7 +25,9 @@ export interface SpecificService {
   name: string;
   categoryId: string;
   description: string;
-  basePrice: number;
+  minPrice: number;
+  maxPrice: number;
+  estimatedTime: string;
 }
 
 export interface ServiceCategory {
@@ -56,6 +57,7 @@ export interface Booking {
   totalValue: number;
   status: BookingStatus;
   negotiationValue?: number;
+  paymentMethod?: 'pix' | 'card' | 'cash';
 }
 
 export interface Review {

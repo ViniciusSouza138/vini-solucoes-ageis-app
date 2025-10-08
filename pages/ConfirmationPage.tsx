@@ -42,12 +42,20 @@ const ConfirmationPage: React.FC = () => {
         </div>
       </div>
 
-      <Link
-        to="/dashboard"
-        className="mt-8 inline-block bg-brand-red text-white font-bold py-3 px-6 rounded-md hover:bg-red-700 transition-colors"
-      >
-        Ver Meus Agendamentos
-      </Link>
+      <div className="mt-8 flex flex-col items-center gap-4">
+        <Link
+          to="/"
+          className="w-full max-w-xs bg-brand-red text-white font-bold py-3 px-6 rounded-md hover:bg-red-700 transition-colors"
+        >
+          Solicitar Outro Serviço
+        </Link>
+        <Link
+          to="/dashboard"
+          className="font-semibold text-gray-300 hover:text-white transition-colors"
+        >
+          Ver Meus Agendamentos
+        </Link>
+      </div>
     </div>
   );
 };
